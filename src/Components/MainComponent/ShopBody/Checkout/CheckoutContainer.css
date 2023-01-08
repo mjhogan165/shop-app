@@ -1,0 +1,33 @@
+.checkout-form-base select {
+    width: 300px;
+    padding: 7px;
+}
+.checkout-form-base input {
+    width: 300px;
+    padding: 7px;
+}
+.input-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    text-align: left;
+    padding: 15px 0px 10px 0px;
+    justify-items: flex-start;
+    align-items: center;
+    position: relative;
+    gap: 1rem;
+}
+
+.checkout-btn{
+    background-color: var(--green);
+    padding: 1.5rem;
+    border-radius: 3px;
+    color: white;
+}
+
+.checkout-error{
+    left: 120px;
+    top: 50px;
+    color: red;
+    position: absolute;
+    top: 50px;
+  }

@@ -1,0 +1,31 @@
+.continue-shopping-btn {
+  max-width: 300px;
+}
+.confirmation-wrap {
+  align-items: center;
+  display: flex;
+}
+.confirmation-left,
+.confirmation-right {
+  flex: 1;
+}
+.confirmation-child {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.summary-cost {
+  padding: 10px 0px;
+}
+.sum-cost-table caption {
+  padding: 10px;
+}
+.sum-cost-table {
+  border-collapse: collapse;
+  text-align: left;
+}
+.sum-cost-table th,
+td {
+  padding: 10px 25px;
+}

@@ -1,0 +1,59 @@
+:root{
+  --font-color-base:  rgb(89,89,89);
+  --green: rgb(63,154,89);
+  --black: rgb(40,47,57);
+  --grey: rgb(231,231,231);
+  --bg: rgb(243,243,243);
+  --blue: rgb(26,91,138);
+  --lightblue: #01a6dd;
+  --font-color-price: #334455;
+}
+
+h1{
+  font-size: 2rem;
+}
+
+
+body{
+  margin: 0;
+  color: var(--font-color-base);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg);
+}
+
+a {
+  color: var(--lightblue);
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+*, *:after, *:before {
+  box-sizing: border-box;
+}
+img {
+  width: 100%;
+  max-height: 250px;
+  object-fit: contain;
+}
+
+i {
+  font-size: 1.75rem;
+}
+ p{
+  margin: 0;
+ }
+ button{
+  border: none;
+  background-color: transparent;
+  font-size: 1rem;
+  position: relative;
+ }
+label:hover, button:hover{
+  cursor: pointer;
+}
+

@@ -1,0 +1,79 @@
+.shipping-form{
+  /* border: 1px solid black;
+  padding: 20px; */
+}
+.shipping-form-wrapper{
+  display: flex;
+  align-items: center;
+}
+
+.shipping-form fieldset{
+  margin: 5px 0px;
+  padding: 10px;
+  border: none;
+}
+
+
+/* .exp-date{
+    display: flex;
+    gap: 20px;
+  } */
+
+  #input-cvv{
+    width: 95px;
+  }
+
+  /* #address-details {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    align-items: center;
+    justify-items: left;
+    padding-top: 15px;
+  } */
+  /* #address-details label {
+    padding: 0px 10px 0px 10px;
+  } */
+  .radio-wrap{
+    padding: 5px 10px;
+  }
+  #shipping-radios {
+    padding-top: 15px;
+  }
+  
+  #shipping-radios label {
+    position: relative;
+    display: flex;
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+    gap: 10px;
+    align-items: center;
+  }
+  #shipping-radios h1 {
+    margin: 0 0 5px 0;
+  }
+  
+  #shipping-radios input {
+    display: none;
+  }
+
+.outer-circle-radio{
+  display: flex;
+  border: 2px solid black;
+  border-radius: 50%;
+  width: 15px;
+  align-items: center;
+  height: 15px;
+  justify-content: center;
+  box-sizing: content-box;
+}
+#shipping-radios .inner-circle-radio{
+  background-color: var(--green);
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+
+}
+
+

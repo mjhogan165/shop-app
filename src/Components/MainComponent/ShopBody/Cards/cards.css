@@ -1,0 +1,105 @@
+.grid-wrapper{
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(250px, 340px) );
+    gap: 1rem;
+    justify-content: center;
+}
+
+.grid-card{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: white;
+  padding: 1.5rem;
+  gap: .75rem;
+  justify-content: space-between;
+  height: 100%;
+}
+.grid-card h1{
+    font-size: 1.75rem;
+    margin: 0;
+}
+
+.grid-card h2 {
+    margin:  0;
+}
+
+.finance-text{
+    color: var(--lightblue);
+    padding: 0;
+}
+
+.modal-wrapper{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(0 0 0 / 52%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  
+}
+
+
+.modal-card{
+    position: relative;
+    display: flex;
+    background-color: white;
+    border-top: solid .5rem var(--green);
+    box-shadow: rgb(255 255 255 / 37%) 0px 7px 29px 0px;
+  }
+  .modal-card img{
+    min-width: 180px
+  }
+  .modal-card > div{
+    padding: 1.5rem;
+  }
+  
+  .modal-card h1 + p{
+    color: var(--lightblue);
+    margin: 1rem 0;
+    font-size: .75rem;
+  }
+  .modal-card-col-1{
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  .modal-card-col-2{
+    flex: 2;
+  }
+  .modal-card-col-3{
+    flex: 1;
+  }
+  .back-btn{
+    color: var(--blue);
+  }
+  .add-cart-btn{
+    background-color: var(--green);
+    padding: 0.75rem;
+    width: 100%;
+    border-radius: 6px;
+    color: white;
+    font-size: 1.25rem;
+  }
+  .show-more-btn{
+    color: var(--blue);
+  }
+  .fa-caret-down {
+    position: absolute;
+    font-size: 1rem;
+    padding-left: 5px;
+  }
+  /* .card-price{
+    color: var(--font-color-price);
+  } */
+
+  .modal-card .fa-solid.xmark{
+    position: absolute;
+    cursor: pointer;
+    left: 0.75rem;
+    top: 0.5rem;
+  }

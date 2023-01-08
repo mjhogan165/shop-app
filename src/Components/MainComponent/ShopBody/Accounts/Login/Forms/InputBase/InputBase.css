@@ -1,0 +1,47 @@
+label {
+  display: block;
+  position: relative;
+  padding-top: 8px;
+}
+
+.input-root {
+  border: 1px solid rgb(162, 159, 159);
+  border-radius: 4px;
+  padding: 10px;
+  line-height: 1.2;
+  width: 100%;
+  box-sizing: border-box;
+}
+.input-wrapper {
+  margin-bottom: 30px;
+}
+.input-item {
+  margin: 20px 0;
+  min-height: 60px;
+}
+.input-label {
+  width: fit-content;
+}
+.error {
+  position: absolute;
+  text-align: left;
+  color: red;
+  padding-top: 5px;
+  font-size: 12px;
+  top: 43px;
+}
+
+.fa-solid.fa-eye {
+  position: absolute;
+  right: 5px;
+  top: 19px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.password-rules {
+  font-size: 11px;
+  max-width: fit-content;
+  margin: 13px 0 0 0;
+  text-align: left;
+}

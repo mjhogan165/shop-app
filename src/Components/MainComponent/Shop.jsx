@@ -13,7 +13,7 @@ import {
 import Menu from "./ShopBody/Menu/Menu";
 import Cart from "./ShopBody/Cart/Cart";
 import Header from "./Header/Header.jsx";
-import ShopBody from "./ShopBody/ShopBody"
+import ShopBody from "./ShopBody/ShopBody";
 
 let displayedCardsTest;
 let accountsVar = [
@@ -74,92 +74,84 @@ export class Shop extends Component {
     let API_URL = "https://api.chec.io/v1/products?limit=50";
     this.setState({ loading: true });
 
-    // console.log(testApi)
-
     const headers = {
       "X-Authorization": STORE_API_KEY,
       Accept: "application/json",
       "Content-Type": "application/json",
     };
-    try {
-      const response = await fetch(API_URL, {
-        method: "GET",
-        headers: headers,
-      });
-      if (response.ok) {
-        console.log("response ok");
-        const json = await response.json();
+
+    await fetch(API_URL, {
+      method: "GET",
+      headers: headers,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("failed to get fetch data from api");
+        }
+        return response;
+      })
+      .then((response) => response.json())
+      .then((parsedResponse) => {
         this.setState((state) => {
-          return { api: json.data, displayedCards: json.data };
+          return {
+            api: parsedResponse.data,
+            displayedCards: parsedResponse.data,
+          };
         });
-        displayedCardsTest = json.data;
         this.setState((state) => {
           return { loading: false };
         });
-      } else {
-        console.log("Else catch");
-        this.setState((state, props) => {
-          return {
-            loading: false,
-            error: true,
-            errorMsg:
-              "Failed to load resource: the server responded with a status of 401 ()",
-          };
-        });
-      }
-    } catch (err) {
-      console.log("CAUGHT");
-      console.error("there was an error.", err);
-      this.setState((state) => {
-        return { error: true };
+      })
+      .catch(() => {
+        return {
+          loading: false,
+          error: true,
+          errorMsg: "Failed to load resource: 401 ()",
+        };
       });
-    }
   }
 
   handleSearchInput = (e) => {
     const searchInput = e.target.value.toLowerCase().trim();
-    const {userCart} = this.state
+    const { userCart } = this.state;
     userCart.forEach((product) => {
-        if (product.name.includes(searchInput)) {
-            console.log(product)
-        }
-        else {
-            console.log('')
-        }
-    })
-  }
+      if (product.name.includes(searchInput)) {
+        console.log(product);
+      } else {
+        console.log("");
+      }
+    });
+  };
   handleClickFilterResults = (e) => {
-    const { displayedCards, } = this.state;
+    const { displayedCards } = this.state;
     const value = e.target.dataset.value;
     const sortedArray = sortArrayBy(displayedCards, value);
     this.setState((state) => {
-      return {  displayedCards: sortedArray };
+      return { displayedCards: sortedArray };
     });
   };
   handleClickCategoryBtn = (e) => {
     if (!this.state.loading) {
-      console.log('clickCategoryBtn')
       const { value } = e.target;
       const { api } = this.state;
       let cardsArr = [];
       switch (true) {
         case value === "mirrorless":
           cardsArr = filterByCategory(api, "mirrorless");
-          displayedCardsTest = cardsArr;
           this.setState((state) => {
             return { displayedCards: cardsArr, selectedCategory: "mirrorless" };
           });
           break;
         case value === "full-frame":
           cardsArr = filterByCategory(api, "full-frame");
-          displayedCardsTest = cardsArr;
+
           this.setState((state) => {
             return { displayedCards: cardsArr, selectedCategory: "full-frame" };
           });
           break;
         case value === "point-and-shoot":
           cardsArr = filterByCategory(api, "point-and-shoot");
-          displayedCardsTest = cardsArr;
+
           this.setState((state) => {
             return {
               displayedCards: cardsArr,
@@ -169,21 +161,20 @@ export class Shop extends Component {
           break;
         case value === "accesories":
           cardsArr = filterByCategory(api, "accesories");
-          displayedCardsTest = cardsArr;
+
           this.setState((state) => {
             return { displayedCards: cardsArr, selectedCategory: "accesories" };
           });
           break;
         case value === "lenses":
           cardsArr = filterByCategory(api, "lenses");
-          displayedCardsTest = cardsArr;
+
           this.setState((state) => {
             return { displayedCards: cardsArr, selectedCategory: "lenses" };
           });
           break;
         case value === "all":
           cardsArr = api;
-          displayedCardsTest = cardsArr;
           this.setState((state) => {
             return { displayedCards: cardsArr, selectedCategory: "all" };
           });
@@ -220,16 +211,18 @@ export class Shop extends Component {
     });
   };
   handleClickCart = () => {
-    const {userCart} = this.state
+    const { userCart } = this.state;
     this.setState({ pageName: "Cart" });
-    let sum = 0
-    
-    for(const item of userCart){
-      let price = item.price.formatted.replaceAll(',','')
-      sum += +(price * item.inCart)
+    let sum = 0;
+
+    for (const item of userCart) {
+      let price = item.price.formatted.replaceAll(",", "");
+      sum += +(price * item.inCart);
     }
-    let sumRound = sum.toFixed(2)
-    this.setState({ subTotal: sumRound.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")});
+    let sumRound = sum.toFixed(2);
+    this.setState({
+      subTotal: sumRound.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+    });
   };
   handleClickShowMore = (e) => {
     const cardId = e.target.dataset.cardid;
@@ -458,57 +451,60 @@ export class Shop extends Component {
     }
   };
 
+  handleCartQuantityChange = (product, e) => {
+    const { userCart } = this.state;
+    const selection = e.target.value;
+    let sum = 0;
+    const userCartCopy = userCart;
+    const productIndex = userCartCopy.findIndex((item) => item === product);
+    let hasQuantityError = false;
+    let cartError = {};
+    let errorsArr;
 
-handleCartQuantityChange = (product, e) => {
-  const { userCart } = this.state;
-  const selection = e.target.value;
-  let sum = 0
-  const userCartCopy = userCart
-  const productIndex = userCartCopy.findIndex(item => item === product)
-  let hasQuantityError = false
-  let cartError = {}
-  let errorsArr
-  
-  userCartCopy[productIndex].inCart = selection
+    userCartCopy[productIndex].inCart = selection;
 
-  let Error = userCartCopy.find(stock => stock.inventory.available < selection)
-if(Error){
-  let msg = Error.name
-  console.log(Error.name)
-  this.setState({quantityError: msg} );
-}
-  else this.setState({quantityError: ''} );
-//   for(const item of userCart){
-//     if(item.inventory.available < selection)
-//     {errorsArr.push(item.name)}
-// }
-// console.log(quantityError)
-// console.log(selection)
+    let Error = userCartCopy.find(
+      (stock) => stock.inventory.available < selection
+    );
+    if (Error) {
+      let msg = Error.name;
+      console.log(Error.name);
+      this.setState({ quantityError: msg });
+    } else this.setState({ quantityError: "" });
+    //   for(const item of userCart){
+    //     if(item.inventory.available < selection)
+    //     {errorsArr.push(item.name)}
+    // }
+    // console.log(quantityError)
+    // console.log(selection)
 
-  for(const item of userCart){
-      let price = item.price.formatted.replaceAll(',','')
-      sum += +(price * selection)
-  }
-  sum += sum * .0625;
-  let sumRound = sum.toFixed(2)
-  this.setState({userCart: userCartCopy} );
-  this.setState({subTotal: sumRound.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")});
-}
+    for (const item of userCart) {
+      let price = item.price.formatted.replaceAll(",", "");
+      sum += +(price * selection);
+    }
+    sum += sum * 0.0625;
+    let sumRound = sum.toFixed(2);
+    this.setState({ userCart: userCartCopy });
+    this.setState({
+      subTotal: sumRound.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+    });
+  };
 
- handleClickRemove = (product, e) => {
-  const { userCart } = this.state;
-  let sum = 0
-  const filtered = userCart.filter(item => item.id !== product.id) 
-  for(const item of filtered){
-      let price = item.price.formatted.replaceAll(',','')
-      sum += (price * item.inCart)
-  }
-  sum += sum * .0625;
-  let sumRound = sum.toFixed(2)
-  this.setState( { userCart: filtered })
-  this.setState({ subTotal: sumRound.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")});
-
-}
+  handleClickRemove = (product, e) => {
+    const { userCart } = this.state;
+    let sum = 0;
+    const filtered = userCart.filter((item) => item.id !== product.id);
+    for (const item of filtered) {
+      let price = item.price.formatted.replaceAll(",", "");
+      sum += price * item.inCart;
+    }
+    sum += sum * 0.0625;
+    let sumRound = sum.toFixed(2);
+    this.setState({ userCart: filtered });
+    this.setState({
+      subTotal: sumRound.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
+    });
+  };
 
   handleAddToCart = (product, e) => {
     const { userCart } = this.state;
@@ -520,39 +516,38 @@ if(Error){
     setTimeout(() => {
       this.setState({ btnClicked: "" });
     }, 4000);
-    if(!userCart.includes(product)){
+    if (!userCart.includes(product)) {
       userCart.push(product);
-      product.inCart = 1
+      product.inCart = 1;
     }
     const newArr = userCart;
     this.setState({ userCart: newArr });
   };
- handleClickProceedToCheckout = () => {
-  if(!this.state.quantityError){
-    this.setState((state, props) => { return { pageName:'Checkout' }})
-  }
+  handleClickProceedToCheckout = () => {
+    if (!this.state.quantityError) {
+      this.setState((state, props) => {
+        return { pageName: "Checkout" };
+      });
+    }
+  };
 
+  setPageName = (string, e) => {
+    e.preventDefault();
+    this.setState(() => ({
+      pageName: string,
+    }));
+  };
 
- }
-
- setPageName = (string, e) => {
-  e.preventDefault();
-  this.setState(() => ({
-    pageName: string,
-  }));
-};
-
-handleOnChangeSearchBar = (e) => {
-  let input = e.target.value.toLowerCase().trim()
-  let filtered = []
-  for(let elm of this.state.api){
-      if(elm.name.toLowerCase().trim().includes(input)){
-        filtered.push(elm)
+  handleOnChangeSearchBar = (e) => {
+    let input = e.target.value.toLowerCase().trim();
+    let filtered = [];
+    for (let elm of this.state.api) {
+      if (elm.name.toLowerCase().trim().includes(input)) {
+        filtered.push(elm);
       }
-  }
-  this.setState({displayedCards: filtered})
-}
-
+    }
+    this.setState({ displayedCards: filtered });
+  };
 
   render() {
     const {
@@ -563,55 +558,53 @@ handleOnChangeSearchBar = (e) => {
       userCart,
       userData,
       pageName,
-      subTotal, 
+      subTotal,
       selectedRadio,
       formError,
-      quantityError
-    } = this.state; 
+      quantityError,
+    } = this.state;
 
     return (
       <div>
-            <Header
-              handleClickCart={this.handleClickCart}
-              handleClickLogin={this.handleClickLogin}
-              userCart={userCart}
-              handleGoHome={this.handleGoHome} 
-              handleOnChangeSearchBar={this.handleOnChangeSearchBar}
-            />
-            <div>
-              <ShopBody
-                accountsVar={this.accountsVar}
-                userData={userData}
-                selectedRadio={selectedRadio}
-                formError={formError}
-                pageName={pageName}
-                userCart={userCart}
-                subTotal={subTotal}
-                loading={loading}
-                error={error}
-                displayGridCards={this.displayGridCards}
-                displayedCards={displayedCards}
-                errorMsg={errorMsg}
-                setPageName={this.setPageName}
-                handleClickCategoryBtn={this.handleClickCategoryBtn}
-                handleClickFilterResults={this.handleClickFilterResults}
-                handleSearchInput={this.handleSearchInput}
-                handleGoHome={this.handleGoHome}
-                handleOnBlur={this.handleOnBlur}
-                handleSubmit={this.handleSubmit}
-                handleClickBackOrX={this.handleClickBackOrX}            
-                handleCartQuantityChange={this.handleCartQuantityChange}
-                handleRadioChange={this.handleRadioChange}
-                handleLoginInput={this.handleLoginInput}
-                handleClickRemove={this.handleClickRemove}
-                handleClickProceedToCheckout={this.handleClickProceedToCheckout}
-                quantityError={quantityError}
-              />
-            </div>
-  
+        <Header
+          handleClickCart={this.handleClickCart}
+          handleClickLogin={this.handleClickLogin}
+          userCart={userCart}
+          handleGoHome={this.handleGoHome}
+          handleOnChangeSearchBar={this.handleOnChangeSearchBar}
+        />
+        <div>
+          <ShopBody
+            accountsVar={this.accountsVar}
+            userData={userData}
+            selectedRadio={selectedRadio}
+            formError={formError}
+            pageName={pageName}
+            userCart={userCart}
+            subTotal={subTotal}
+            loading={loading}
+            error={error}
+            displayGridCards={this.displayGridCards}
+            displayedCards={displayedCards}
+            errorMsg={errorMsg}
+            setPageName={this.setPageName}
+            handleClickCategoryBtn={this.handleClickCategoryBtn}
+            handleClickFilterResults={this.handleClickFilterResults}
+            handleSearchInput={this.handleSearchInput}
+            handleGoHome={this.handleGoHome}
+            handleOnBlur={this.handleOnBlur}
+            handleSubmit={this.handleSubmit}
+            handleClickBackOrX={this.handleClickBackOrX}
+            handleCartQuantityChange={this.handleCartQuantityChange}
+            handleRadioChange={this.handleRadioChange}
+            handleLoginInput={this.handleLoginInput}
+            handleClickRemove={this.handleClickRemove}
+            handleClickProceedToCheckout={this.handleClickProceedToCheckout}
+            quantityError={quantityError}
+          />
+        </div>
       </div>
-    )
-  
+    );
   }
 }
 
